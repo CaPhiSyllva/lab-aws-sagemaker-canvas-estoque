@@ -1,47 +1,83 @@
 # 📊 Previsão de Estoque Inteligente na AWS com [SageMaker Canvas](https://aws.amazon.com/pt/sagemaker/canvas/)
 
-Bem-vindo ao desafio de projeto "Previsão de Estoque Inteligente na AWS com SageMaker Canvas. Neste Lab DIO, você aprenderá a usar o SageMaker Canvas para criar previsões de estoque baseadas em Machine Learning (ML). Siga os passos abaixo para completar o desafio!
+## ReadMe: Script para Gerar Dados Simulados em um Arquivo CSV
 
-## 📋 Pré-requisitos
+### Descrição
 
-Antes de começar, certifique-se de ter uma conta na AWS. Se precisar de ajuda para criar sua conta, confira nosso repositório [AWS Cloud Quickstart](https://github.com/digitalinnovationone/aws-cloud-quickstart).
+Este script em Python gera um arquivo CSV com 1000 linhas de dados simulados. Cada linha contém informações sobre um evento de produto, incluindo ID do produto, data do evento, preço, indicação de promoção e quantidade em estoque.
+
+### Funcionalidades
+
+- **Geração de Data Aleatória**: A função `random_date` gera uma data aleatória entre duas datas especificadas.
+- **Dados Simulados**: Geração de dados simulados para 1000 produtos.
+- **Escrita de Arquivo CSV**: Os dados simulados são escritos em um arquivo CSV.
+
+### Estrutura do Arquivo CSV
+
+O arquivo CSV gerado possui o seguinte cabeçalho:
+- `ID_PRODUTO`: Identificador do produto (número aleatório entre 1000 e 1024)
+- `DATA_EVENTO`: Data do evento (data aleatória entre 31 de dezembro de 2023 e 3 de julho de 2024)
+- `PRECO`: Preço do produto (número decimal aleatório entre 10 e 200)
+- `FLAG_PROMOCAO`: Indicação se o produto está em promoção (0 ou 1)
+- `QUANTIDADE_ESTOQUE`: Quantidade em estoque (número aleatório entre 50 e 100)
+
+### Como Utilizar
+
+1. **Requisitos**:
+   - Python 3.x instalado
+   - Biblioteca padrão `csv` do Python
+
+2. **Passos para Executar**:
+   - Copie o script fornecido abaixo para um arquivo Python, por exemplo, `gerar_dados_simulados.py`.
+   - Execute o script em um terminal ou ambiente de desenvolvimento integrado (IDE).
+   - Após a execução, um arquivo chamado `dados_simulados.csv` será gerado no mesmo diretório do script.
+
+```python
+import csv
+import random
+from datetime import datetime, timedelta
+
+# Função para gerar uma data aleatória no intervalo específico
+def random_date(start_date, end_date):
+    delta = end_date - start_date
+    random_days = random.randint(0, delta.days)
+    return start_date + timedelta(days=random_days)
+
+# Dados para gerar o CSV
+header = ["ID_PRODUTO", "DATA_EVENTO", "PRECO", "FLAG_PROMOCAO", "QUANTIDADE_ESTOQUE"]
+
+start_date = datetime(2023, 12, 31)
+end_date = datetime(2024, 7, 3)
+data = []
+
+# Gerar 1000 linhas de dados
+for _ in range(1000):
+    id_produto = random.randint(1000, 1024)
+    data_evento = random_date(start_date, end_date).strftime("%Y-%m-%d")
+    preco = round(random.uniform(10, 200), 2)
+    flag_promocao = random.choice([0, 1])
+    quantidade_estoque = random.randint(50, 100)
+    data.append([id_produto, data_evento, preco, flag_promocao, quantidade_estoque])
+
+# Escrever os dados no arquivo CSV
+csv_file = "dados_simulados.csv"
+with open(csv_file, mode='w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(header)
+    writer.writerows(data)
+
+print(f"Arquivo CSV '{csv_file}' gerado com sucesso com 1000 linhas de dados simulados.")
+```
+
+### Observações
+
+- A função `random_date` calcula a diferença em dias entre duas datas e seleciona um número aleatório dentro desse intervalo.
+- Os preços são gerados com duas casas decimais.
+- A quantidade em estoque e o ID do produto são gerados dentro de intervalos especificados para garantir variedade nos dados.
 
 
-## 🎯 Objetivos Deste Desafio de Projeto (Lab)
+Este script é útil para gerar dados de teste em cenários onde dados reais não estão disponíveis, permitindo simulações e testes de funcionalidades que dependem de dados estruturados de produtos. 
 
-![image](https://github.com/digitalinnovationone/lab-aws-sagemaker-canvas-estoque/assets/730492/72f5c21f-5562-491e-aa42-2885a3184650)
-
-- Dê um fork neste projeto e reescreva este `README.md`. Sinta-se à vontade para detalhar todo o processo de criação do seu Modelo de ML para uma "Previsão de Estoque Inteligente".
-- Para isso, siga o [passo a passo] descrito a seguir e evolua as suas habilidades em ML no-code com o Amazon SageMaker Canvas.
-- Ao concluir, envie a URL do seu repositório com a solução na plataforma da DIO.
+Com os dados gerados implementei no modelo de ML do SageMaker Canvas e realizei a preparação e limpeza dos dados
 
 
-## 🚀 Passo a Passo
-
-### 1. Selecionar Dataset
-
--   Navegue até a pasta `datasets` deste repositório. Esta pasta contém os datasets que você poderá escolher para treinar e testar seu modelo de ML. Sinta-se à vontade para gerar/enriquecer seus próprios datasets, quanto mais você se engajar, mais relevante esse projeto será em seu portfólio.
--   Escolha o dataset que você usará para treinar seu modelo de previsão de estoque.
--   Faça o upload do dataset no SageMaker Canvas.
-
-### 2. Construir/Treinar
-
--   No SageMaker Canvas, importe o dataset que você selecionou.
--   Configure as variáveis de entrada e saída de acordo com os dados.
--   Inicie o treinamento do modelo. Isso pode levar algum tempo, dependendo do tamanho do dataset.
-
-### 3. Analisar
-
--   Após o treinamento, examine as métricas de performance do modelo.
--   Verifique as principais características que influenciam as previsões.
--   Faça ajustes no modelo se necessário e re-treine até obter um desempenho satisfatório.
-
-### 4. Prever
-
--   Use o modelo treinado para fazer previsões de estoque.
--   Exporte os resultados e analise as previsões geradas.
--   Documente suas conclusões e qualquer insight obtido a partir das previsões.
-
-## 🤔 Dúvidas?
-
-Esperamos que esta experiência tenha sido enriquecedora e que você tenha aprendido mais sobre Machine Learning aplicado a problemas reais. Se tiver alguma dúvida, não hesite em abrir uma issue neste repositório ou entrar em contato com a equipe da DIO.
