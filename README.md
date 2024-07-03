@@ -1,36 +1,16 @@
-# 📊 Previsão de Estoque Inteligente na AWS com [SageMaker Canvas](https://aws.amazon.com/pt/sagemaker/canvas/)
+# Previsão de Estoque Inteligente com Amazon SageMaker Canvas
 
-## ReadMe: Script para Gerar Dados Simulados em um Arquivo CSV
+## Descrição
 
-### Descrição
+Neste guia, vou compartilhar minha experiência utilizando o Amazon SageMaker Canvas para criar um modelo de machine learning (ML) com o objetivo de prever o estoque de produtos. O processo incluiu a seleção e criação de um dataset, construção e treinamento do modelo de ML, análise do modelo e obtenção de previsões e insights.
 
-Este script em Python gera um arquivo CSV com 1000 linhas de dados simulados. Cada linha contém informações sobre um evento de produto, incluindo ID do produto, data do evento, preço, indicação de promoção e quantidade em estoque.
+## Etapas do Processo
 
-### Funcionalidades
+### 1. Selecionar ou Criar Seu Dataset
 
-- **Geração de Data Aleatória**: A função `random_date` gera uma data aleatória entre duas datas especificadas.
-- **Dados Simulados**: Geração de dados simulados para 1000 produtos.
-- **Escrita de Arquivo CSV**: Os dados simulados são escritos em um arquivo CSV.
+Para iniciar, eu precisava de um dataset contendo dados relevantes para a previsão de estoque. Como não tinha dados reais disponíveis, decidi criar um dataset simulado utilizando um script em Python. O dataset incluía informações como IDs de produtos, datas de eventos, preços, indicações de promoções e quantidades em estoque.
 
-### Estrutura do Arquivo CSV
-
-O arquivo CSV gerado possui o seguinte cabeçalho:
-- `ID_PRODUTO`: Identificador do produto (número aleatório entre 1000 e 1024)
-- `DATA_EVENTO`: Data do evento (data aleatória entre 31 de dezembro de 2023 e 3 de julho de 2024)
-- `PRECO`: Preço do produto (número decimal aleatório entre 10 e 200)
-- `FLAG_PROMOCAO`: Indicação se o produto está em promoção (0 ou 1)
-- `QUANTIDADE_ESTOQUE`: Quantidade em estoque (número aleatório entre 50 e 100)
-
-### Como Utilizar
-
-1. **Requisitos**:
-   - Python 3.x instalado
-   - Biblioteca padrão `csv` do Python
-
-2. **Passos para Executar**:
-   - Copie o script fornecido abaixo para um arquivo Python, por exemplo, `gerar_dados_simulados.py`.
-   - Execute o script em um terminal ou ambiente de desenvolvimento integrado (IDE).
-   - Após a execução, um arquivo chamado `dados_simulados.csv` será gerado no mesmo diretório do script.
+#### Script para Criar Dataset Simulado:
 
 ```python
 import csv
@@ -69,15 +49,40 @@ with open(csv_file, mode='w', newline='') as file:
 print(f"Arquivo CSV '{csv_file}' gerado com sucesso com 1000 linhas de dados simulados.")
 ```
 
-### Observações
+### 2. Construção e Treinamento do ML
 
-- A função `random_date` calcula a diferença em dias entre duas datas e seleciona um número aleatório dentro desse intervalo.
-- Os preços são gerados com duas casas decimais.
-- A quantidade em estoque e o ID do produto são gerados dentro de intervalos especificados para garantir variedade nos dados.
+Com o dataset pronto, segui para o Amazon SageMaker Canvas:
 
+1. **Importei o dataset**:
+   - Fiz o upload do arquivo CSV diretamente na plataforma.
 
-Este script é útil para gerar dados de teste em cenários onde dados reais não estão disponíveis, permitindo simulações e testes de funcionalidades que dependem de dados estruturados de produtos. 
+2. **Configurei o modelo**:
+   - Selecionei `QUANTIDADE_ESTOQUE` como a variável alvo e incluí outras variáveis relevantes como entradas.
+   - Escolhi o tipo de problema como regressão, já que eu queria prever quantidades numéricas.
 
-Com os dados gerados implementei no modelo de ML do SageMaker Canvas e realizei a preparação e limpeza dos dados
+3. **Construí e treinei o modelo**:
+   - O SageMaker Canvas automaticamente selecionou os algoritmos mais adequados e iniciou o treinamento do modelo.
 
+### 3. Analise do Modelo de ML
 
+Após o treinamento do modelo, analisei os resultados fornecidos pelo SageMaker Canvas:
+
+- **Métricas de desempenho**: A plataforma exibiu métricas como erro médio absoluto (MAE), erro quadrático médio (RMSE) e coeficiente de determinação (R²), que me ajudaram a entender a precisão do modelo.
+- **Importância das características**: Identifiquei quais variáveis tinham maior impacto nas previsões, fornecendo insights sobre os fatores que influenciam o estoque.
+
+### 4. Previsões e Insights Usando Seu Modelo de ML
+
+Com o modelo treinado, comecei a gerar previsões e a obter insights:
+
+1. **Realizei previsões**:
+   - Utilizei o modelo para prever a quantidade de estoque futura com base em novos dados de entrada.
+   - Exportei as previsões para análise adicional e tomada de decisão.
+
+2. **Obtenção de insights**:
+   - Usei os insights fornecidos pelo modelo para otimizar a gestão de estoque, identificar tendências e tomar decisões informadas.
+
+## Conclusão
+
+Minha experiência com o Amazon SageMaker Canvas foi bastante positiva. A plataforma facilitou a criação de um modelo preditivo robusto para previsão de estoque, mesmo sem a necessidade de um profundo conhecimento em machine learning. Seguindo estes passos, consegui desenvolver um modelo eficiente e aplicar os insights obtidos para melhorar a gestão de estoque.
+
+Se você está interessado em explorar mais sobre o Amazon SageMaker Canvas, recomendo consultar a [documentação oficial](https://aws.amazon.com/sagemaker/canvas/).
